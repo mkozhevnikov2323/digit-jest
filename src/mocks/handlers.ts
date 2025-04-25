@@ -6,8 +6,8 @@ interface TodoPatchInput {
 }
 
 let todos = [
-  { id: 1, text: 'Learn React', completed: false },
-  { id: 2, text: 'Write tests', completed: false },
+  { id: 1, text: 'Mocked Learn React', completed: false },
+  { id: 2, text: 'Mocked Write tests', completed: false },
 ];
 
 export const handlers = [
