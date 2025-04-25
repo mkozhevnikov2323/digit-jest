@@ -1,38 +1,40 @@
-describe('3.3. Фильтрация задач', () => {
+describe('filter Todos', () => {
   beforeEach(() => {
     cy.visit('/');
   });
 
-  it('добавляет задачи и фильтрует по активным и выполненным', () => {
-    // Добавляем первую задачу (active)
+  it('added todos and filtered by active and completed', () => {
+    // Add task 1 (active)
     cy.get('[data-testid="todo-input"]').type('task 1');
     cy.get('[data-testid="add-button"]').click();
 
-    // Добавляем вторую задачу (будем помечать как completed)
+    // Add task 2 (this will showed as completed)
     cy.get('[data-testid="todo-input"]').type('task 2');
     cy.get('[data-testid="add-button"]').click();
 
-    // Добавляем третью задачу (active)
+    // Add task 3 (active)
     cy.get('[data-testid="todo-input"]').type('task 3');
     cy.get('[data-testid="add-button"]').click();
 
-    // Помечаем вторую задачу как выполненную
-    // Предположим ID присваивается по порядку: 0, 1, 2
-    cy.get('[data-testid="toggle-1"]').click();
+    // Clicked task 2 as completed
+    cy.contains('[data-testid^="todo-text-"]', 'task 2')
+      .closest('div')
+      .find('input[type="checkbox"]')
+      .click();
 
-    // Проверяем, что в "All" фильтре видны все 3 задачи
+    // Check at "All" - showed all tasks
     cy.get('[data-testid="filter-all"]').click();
     cy.get('[data-testid="todo-list"]').should('contain.text', 'task 1');
     cy.get('[data-testid="todo-list"]').should('contain.text', 'task 2');
     cy.get('[data-testid="todo-list"]').should('contain.text', 'task 3');
 
-    // Переключаемся на фильтр "Только активные"
+    // Switch on filter "Active" - task 2 is not contained
     cy.get('[data-testid="filter-active"]').click();
     cy.get('[data-testid="todo-list"]').should('contain.text', 'task 1');
     cy.get('[data-testid="todo-list"]').should('contain.text', 'task 3');
     cy.get('[data-testid="todo-list"]').should('not.contain.text', 'task 2');
 
-    // Переключаемся на фильтр "Только выполненные"
+    // Switch on filter "Completed" - only contain Task 2
     cy.get('[data-testid="filter-completed"]').click();
     cy.get('[data-testid="todo-list"]').should('contain.text', 'task 2');
     cy.get('[data-testid="todo-list"]').should('not.contain.text', 'task 1');
